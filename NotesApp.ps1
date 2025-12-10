@@ -8,10 +8,10 @@ $xaml = @"
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Support Notes" Height="750" Width="1100" WindowStartupLocation="CenterScreen"
-        Background="#f5f5f5" Foreground="#1a1a1a" FontFamily="Segoe UI" FontSize="14">
+        Background="#1e1e1e" Foreground="#e0e0e0" FontFamily="Segoe UI" FontSize="14">
     <Window.Resources>
         <Style TargetType="Label">
-            <Setter Property="Foreground" Value="#1a1a1a"/>
+            <Setter Property="Foreground" Value="#e0e0e0"/>
             <Setter Property="Margin" Value="0 0 6 0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
@@ -19,16 +19,16 @@ $xaml = @"
         <Style TargetType="TextBox">
             <Setter Property="Padding" Value="6"/>
             <Setter Property="Margin" Value="0 0 10 0"/>
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="#1a1a1a"/>
-            <Setter Property="BorderBrush" Value="#d1d5db"/>
+            <Setter Property="Background" Value="#2d2d2d"/>
+            <Setter Property="Foreground" Value="#e0e0e0"/>
+            <Setter Property="BorderBrush" Value="#3f3f3f"/>
             <Setter Property="BorderThickness" Value="1"/>
         </Style>
         <Style x:Key="ClickableField" TargetType="TextBox">
             <Setter Property="Padding" Value="6"/>
             <Setter Property="Margin" Value="0 0 10 0"/>
-            <Setter Property="Background" Value="White"/>
-            <Setter Property="Foreground" Value="#1a1a1a"/>
+            <Setter Property="Background" Value="#2d2d2d"/>
+            <Setter Property="Foreground" Value="#e0e0e0"/>
             <Setter Property="BorderBrush" Value="#60a5fa"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
@@ -37,17 +37,17 @@ $xaml = @"
         <Style TargetType="Button">
             <Setter Property="Padding" Value="10 6"/>
             <Setter Property="Margin" Value="6 0 0 0"/>
-            <Setter Property="Background" Value="#3b82f6"/>
+            <Setter Property="Background" Value="#0078d4"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderBrush" Value="#2563eb"/>
+            <Setter Property="BorderBrush" Value="#005a9e"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
-        <SolidColorBrush x:Key="Card" Color="White"/>
+        <SolidColorBrush x:Key="Card" Color="#252526"/>
     </Window.Resources>
 
     <DockPanel LastChildFill="True">
-        <Menu DockPanel.Dock="Top" Background="White" Foreground="#1a1a1a">
+        <Menu DockPanel.Dock="Top" Background="#2d2d2d" Foreground="#e0e0e0">
             <MenuItem Header="File">
                 <MenuItem Header="New" x:Name="MenuNew"/>
                 <MenuItem Header="Open" x:Name="MenuOpen"/>
@@ -73,19 +73,19 @@ $xaml = @"
             </Grid.RowDefinitions>
 
             <!-- Notes body with spell check -->
-            <Border Grid.Row="0" Background="{StaticResource Card}" CornerRadius="4" Padding="10" BorderBrush="#d1d5db" BorderThickness="1">
+            <Border Grid.Row="0" Background="{StaticResource Card}" CornerRadius="4" Padding="10" BorderBrush="#3f3f3f" BorderThickness="1">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <TextBox x:Name="NotesBox" Grid.Row="0" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" SpellCheck.IsEnabled="True"
-                             TextWrapping="Wrap" Background="White" BorderBrush="#d1d5db" BorderThickness="1"/>
+                             TextWrapping="Wrap" Background="#2d2d2d" Foreground="#e0e0e0" BorderBrush="#3f3f3f" BorderThickness="1"/>
                 </Grid>
             </Border>
 
             <!-- Info strip: auto-filled metadata (clickable to copy, right-click to edit) -->
-            <Border Grid.Row="1" Margin="0 10 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="10" BorderBrush="#d1d5db" BorderThickness="1">
+            <Border Grid.Row="1" Margin="0 10 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="10" BorderBrush="#3f3f3f" BorderThickness="1">
                 <UniformGrid Columns="6" Rows="1" Margin="0" HorizontalAlignment="Stretch">
                     <StackPanel Orientation="Vertical">
                         <Label Content="Asset Tag"/>
@@ -115,7 +115,7 @@ $xaml = @"
             </Border>
 
             <!-- Quick add buttons placeholder -->
-            <Border Grid.Row="2" Margin="0 10 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="10" BorderBrush="#d1d5db" BorderThickness="1">
+            <Border Grid.Row="2" Margin="0 10 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="10" BorderBrush="#3f3f3f" BorderThickness="1">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                     <Label Content="Quick Add:" Margin="0 0 10 0"/>
                     <Button x:Name="BtnAddTemplateA" Content="Template A"/>
@@ -125,7 +125,7 @@ $xaml = @"
             </Border>
 
             <!-- Clipboard + checklists row with timer, note counter, navigation -->
-            <Border Grid.Row="3" Margin="0 10 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="10" BorderBrush="#d1d5db" BorderThickness="1">
+            <Border Grid.Row="3" Margin="0 10 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="10" BorderBrush="#3f3f3f" BorderThickness="1">
                 <Grid>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         <Button x:Name="BtnCopy" Content="Copy Notes"/>
@@ -135,8 +135,8 @@ $xaml = @"
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Label x:Name="TimerLabel" Content="00:00" FontSize="16" FontWeight="Bold" Margin="0 0 15 0"/>
                         <Label x:Name="NoteCountLabel" Content="Note: 1" FontSize="16" FontWeight="Bold" Margin="0 0 10 0"/>
-                        <Button x:Name="BtnPrevNote" Content="◄" Width="40" Margin="0 0 5 0"/>
-                        <Button x:Name="BtnNextNote" Content="►" Width="40"/>
+                        <Button x:Name="BtnPrevNote" Content="←" Width="40" Margin="0 0 5 0" FontSize="18"/>
+                        <Button x:Name="BtnNextNote" Content="→" Width="40" FontSize="18"/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -235,7 +235,7 @@ function Add-FieldContextMenu {
         $inputDialog.Height = 150
         $inputDialog.WindowStartupLocation = "CenterOwner"
         $inputDialog.Owner = $window
-        $inputDialog.Background = "#f5f5f5"
+        $inputDialog.Background = "#1e1e1e"
         
         $grid = New-Object System.Windows.Controls.Grid
         $grid.Margin = "15"
@@ -270,7 +270,7 @@ function Add-FieldContextMenu {
         $okButton.Content = "OK"
         $okButton.Padding = "15 5"
         $okButton.Margin = "0 0 5 0"
-        $okButton.Background = "#3b82f6"
+        $okButton.Background = "#0078d4"
         $okButton.Foreground = "White"
         $okButton.Add_Click({
             $sender.Text = $inputBox.Text
@@ -280,7 +280,7 @@ function Add-FieldContextMenu {
         $cancelButton = New-Object System.Windows.Controls.Button
         $cancelButton.Content = "Cancel"
         $cancelButton.Padding = "15 5"
-        $cancelButton.Background = "#9ca3af"
+        $cancelButton.Background = "#6e6e6e"
         $cancelButton.Foreground = "White"
         $cancelButton.Add_Click({ $inputDialog.Close() })
         
