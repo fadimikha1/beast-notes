@@ -33,6 +33,20 @@ $xaml = @"
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="IsReadOnly" Value="True"/>
+            <Style.Triggers>
+                <Trigger Property="Text" Value="">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                                <VisualBrush.Visual>
+                                    <Label Content="{Binding Path=Tag, RelativeSource={RelativeSource AncestorType=TextBox}}" 
+                                           Foreground="#6e6e6e" FontStyle="Italic" Padding="2,0,0,0"/>
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
         </Style>
         <Style TargetType="Button">
             <Setter Property="Padding" Value="10 6"/>
@@ -87,38 +101,19 @@ $xaml = @"
             <!-- Info strip: auto-filled metadata (clickable to copy, right-click to edit) -->
             <Border Grid.Row="1" Margin="0 10 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="10" BorderBrush="#3f3f3f" BorderThickness="1">
                 <UniformGrid Columns="6" Rows="1" Margin="0" HorizontalAlignment="Stretch">
-                    <StackPanel Orientation="Vertical">
-                        <Label Content="Asset Tag"/>
-                        <TextBox x:Name="AssetTagBox" Style="{StaticResource ClickableField}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Vertical">
-                        <Label Content="Machine Name"/>
-                        <TextBox x:Name="MachineNameBox" Style="{StaticResource ClickableField}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Vertical">
-                        <Label Content="IP Address"/>
-                        <TextBox x:Name="IpAddressBox" Style="{StaticResource ClickableField}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Vertical">
-                        <Label Content="User Name"/>
-                        <TextBox x:Name="UserNameBox" Style="{StaticResource ClickableField}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Vertical">
-                        <Label Content="Phone"/>
-                        <TextBox x:Name="PhoneBox" Style="{StaticResource ClickableField}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Vertical">
-                        <Label Content="Ticket"/>
-                        <TextBox x:Name="TicketBox" Style="{StaticResource ClickableField}"/>
-                    </StackPanel>
+                    <TextBox x:Name="AssetTagBox" Style="{StaticResource ClickableField}" Tag="Asset Tag"/>
+                    <TextBox x:Name="MachineNameBox" Style="{StaticResource ClickableField}" Tag="Machine Name"/>
+                    <TextBox x:Name="IpAddressBox" Style="{StaticResource ClickableField}" Tag="IP Address"/>
+                    <TextBox x:Name="UserNameBox" Style="{StaticResource ClickableField}" Tag="User Name"/>
+                    <TextBox x:Name="PhoneBox" Style="{StaticResource ClickableField}" Tag="Phone"/>
+                    <TextBox x:Name="TicketBox" Style="{StaticResource ClickableField}" Tag="Ticket"/>
                 </UniformGrid>
             </Border>
 
             <!-- Quick add buttons placeholder -->
             <Border Grid.Row="2" Margin="0 10 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="10" BorderBrush="#3f3f3f" BorderThickness="1">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Label Content="Quick Add:" Margin="0 0 10 0"/>
-                    <Button x:Name="BtnAddTemplateA" Content="Template A"/>
+                    <Button x:Name="BtnAddTemplateA" Content="Template A" Margin="0 0 0 0"/>
                     <Button x:Name="BtnAddTemplateB" Content="Template B"/>
                     <Button x:Name="BtnAddTemplateC" Content="Template C"/>
                 </StackPanel>
@@ -135,8 +130,8 @@ $xaml = @"
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Label x:Name="TimerLabel" Content="00:00" FontSize="16" FontWeight="Bold" Margin="0 0 15 0"/>
                         <Label x:Name="NoteCountLabel" Content="Note: 1" FontSize="16" FontWeight="Bold" Margin="0 0 10 0"/>
-                        <Button x:Name="BtnPrevNote" Content="←" Width="40" Margin="0 0 5 0" FontSize="18"/>
-                        <Button x:Name="BtnNextNote" Content="→" Width="40" FontSize="18"/>
+                        <Button x:Name="BtnPrevNote" Content="&lt;" Width="40" Margin="0 0 5 0" FontSize="20" FontWeight="Bold"/>
+                        <Button x:Name="BtnNextNote" Content="&gt;" Width="40" FontSize="20" FontWeight="Bold"/>
                     </StackPanel>
                 </Grid>
             </Border>
@@ -227,8 +222,9 @@ function Add-FieldContextMenu {
     })
     
     # Right-click opens edit dialog
-    $textBox.Add_MouseRightButtonDown({
+    $textBox.Add_PreviewMouseRightButtonDown({
         param($sender, $e)
+        $e.Handled = $true
         $inputDialog = New-Object System.Windows.Window
         $inputDialog.Title = "Edit $fieldName"
         $inputDialog.Width = 400
@@ -294,7 +290,6 @@ function Add-FieldContextMenu {
         $inputDialog.Content = $grid
         $inputBox.Focus() | Out-Null
         $inputDialog.ShowDialog() | Out-Null
-        $e.Handled = $true
     }.GetNewClosure())
 }
 
