@@ -35,8 +35,8 @@ $xaml = @"
             <Setter Property="IsReadOnly" Value="True"/>
         </Style>
         <Style TargetType="Button">
-            <Setter Property="Padding" Value="10 6"/>
-            <Setter Property="Margin" Value="6 0 0 0"/>
+            <Setter Property="Padding" Value="8 4"/>
+            <Setter Property="Margin" Value="4 0 0 0"/>
             <Setter Property="Background" Value="#0078d4"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderBrush" Value="#005a9e"/>
@@ -72,20 +72,20 @@ $xaml = @"
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <!-- Notes body with spell check -->
-            <Border Grid.Row="0" Background="{StaticResource Card}" CornerRadius="4" Padding="10" BorderBrush="#3f3f3f" BorderThickness="1">
+            <!-- Notes body with spell check (primary space) -->
+            <Border Grid.Row="0" Background="{StaticResource Card}" CornerRadius="4" Padding="12" BorderBrush="#3f3f3f" BorderThickness="1">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <TextBox x:Name="NotesBox" Grid.Row="0" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" SpellCheck.IsEnabled="True"
-                             TextWrapping="Wrap" Background="#2d2d2d" Foreground="#e0e0e0" BorderBrush="#3f3f3f" BorderThickness="1"/>
+                             TextWrapping="Wrap" Background="#2d2d2d" Foreground="#e0e0e0" BorderBrush="#3f3f3f" BorderThickness="1" FontSize="15"/>
                 </Grid>
             </Border>
 
             <!-- Info strip: auto-filled metadata (clickable to copy, right-click to edit) -->
-            <Border Grid.Row="1" Margin="0 10 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="10" BorderBrush="#3f3f3f" BorderThickness="1">
+            <Border Grid.Row="1" Margin="0 8 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="6" BorderBrush="#3f3f3f" BorderThickness="1" MinHeight="0">
                 <UniformGrid Columns="6" Rows="1" Margin="0" HorizontalAlignment="Stretch">
                     <TextBox x:Name="AssetTagBox" Style="{StaticResource ClickableField}" Tag="Asset Tag"/>
                     <TextBox x:Name="MachineNameBox" Style="{StaticResource ClickableField}" Tag="Machine Name"/>
@@ -97,16 +97,16 @@ $xaml = @"
             </Border>
 
             <!-- Quick add buttons placeholder -->
-            <Border Grid.Row="2" Margin="0 10 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="10" BorderBrush="#3f3f3f" BorderThickness="1">
+            <Border Grid.Row="2" Margin="0 8 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="6" BorderBrush="#3f3f3f" BorderThickness="1" MinHeight="0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button x:Name="BtnAddTemplateA" Content="Template A" Margin="0 0 0 0"/>
+                    <Button x:Name="BtnAddTemplateA" Content="Template A" Margin="0 0 0 0" Padding="8 4"/>
                     <Button x:Name="BtnAddTemplateB" Content="Template B"/>
                     <Button x:Name="BtnAddTemplateC" Content="Template C"/>
                 </StackPanel>
             </Border>
 
             <!-- Clipboard + checklists row with timer, note counter, navigation -->
-            <Border Grid.Row="3" Margin="0 10 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="10" BorderBrush="#3f3f3f" BorderThickness="1">
+            <Border Grid.Row="3" Margin="0 8 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="6" BorderBrush="#3f3f3f" BorderThickness="1" MinHeight="0">
                 <Grid>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         <Button x:Name="BtnCopy" Content="Copy Notes"/>
