@@ -242,6 +242,13 @@ function Setup-PlaceholderBehavior {
     })
 }
 
+# Helper: get actual value excluding placeholder
+function Get-FieldValue {
+    param($textBox)
+    if ($null -eq $textBox.Tag -or $textBox.Tag.IsPlaceholder) { return "" }
+    return $textBox.Text
+}
+
 # Helper: Create context menu for editing field value
 function Add-FieldContextMenu {
     param($textBox, $fieldName)
@@ -383,7 +390,30 @@ $BtnNextNote.Add_Click({
 
 # Action buttons
 $BtnCopy.Add_Click({
-    Set-Clipboard -Value $NotesBox.Text
+    $customer = Get-FieldValue $UserNameBox
+    $phone    = Get-FieldValue $PhoneBox
+    $asset    = Get-FieldValue $AssetTagBox
+    $machine  = Get-FieldValue $MachineNameBox
+    $ip       = Get-FieldValue $IpAddressBox
+    $ticket   = Get-FieldValue $TicketBox
+
+    $metaLines = @()
+    if ($customer) { $metaLines += "Customer: $customer" }
+    if ($phone)    { $metaLines += "Phone: $phone" }
+    if ($asset)    { $metaLines += "Asset Tag: $asset" }
+    if ($machine)  { $metaLines += "Machine Name: $machine" }
+    if ($ip)       { $metaLines += "IP Address: $ip" }
+    if ($ticket)   { $metaLines += "Ticket: $ticket" }
+
+    $noteBody = $NotesBox.Text
+    $parts = @()
+    if ($metaLines.Count -gt 0) { $parts += ($metaLines -join "`n") }
+    if ($noteBody -and $noteBody.Trim() -ne "") {
+        if ($parts.Count -gt 0) { $parts += "" }
+        $parts += $noteBody
+    }
+    $finalText = $parts -join "`n"
+    [System.Windows.Clipboard]::SetText($finalText)
 })
 $BtnChecklist.Add_Click({
     $NotesBox.AppendText("`n[Checklist placeholder]\n- Item 1\n- Item 2\n")
