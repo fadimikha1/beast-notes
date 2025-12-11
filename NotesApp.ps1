@@ -40,7 +40,7 @@ $xaml = @"
                             <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None">
                                 <VisualBrush.Visual>
                                     <Label Content="{Binding Path=Tag, RelativeSource={RelativeSource AncestorType=TextBox}}" 
-                                           Foreground="#888888" FontStyle="Italic" Padding="2,0,0,0"/>
+                                           Foreground="#b0b0b0" FontStyle="Italic" Padding="2,0,0,0"/>
                                 </VisualBrush.Visual>
                             </VisualBrush>
                         </Setter.Value>
