@@ -40,7 +40,7 @@ $xaml = @"
                             <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None">
                                 <VisualBrush.Visual>
                                     <Label Content="{Binding Path=Tag, RelativeSource={RelativeSource AncestorType=TextBox}}" 
-                                           Foreground="#6e6e6e" FontStyle="Italic" Padding="2,0,0,0"/>
+                                           Foreground="#888888" FontStyle="Italic" Padding="2,0,0,0"/>
                                 </VisualBrush.Visual>
                             </VisualBrush>
                         </Setter.Value>
@@ -215,9 +215,11 @@ function Add-FieldContextMenu {
     param($textBox, $fieldName)
     
     # Left-click copies field to clipboard
-    $textBox.Add_MouseLeftButtonDown({
-        if ($this.Text) {
-            Set-Clipboard -Value $this.Text
+    $textBox.Add_PreviewMouseLeftButtonDown({
+        param($sender, $e)
+        if ($this.Text -and $this.Text.Trim() -ne "") {
+            [System.Windows.Clipboard]::SetText($this.Text)
+            $e.Handled = $false
         }
     })
     
@@ -255,6 +257,9 @@ function Add-FieldContextMenu {
         $inputBox.Text = $this.Text
         $inputBox.Padding = "6"
         $inputBox.Margin = "0 0 0 10"
+        $inputBox.Background = "#2d2d2d"
+        $inputBox.Foreground = "#e0e0e0"
+        $inputBox.BorderBrush = "#3f3f3f"
         [System.Windows.Controls.Grid]::SetRow($inputBox, 1)
         
         $buttonPanel = New-Object System.Windows.Controls.StackPanel
