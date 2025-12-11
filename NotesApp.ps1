@@ -33,20 +33,6 @@ $xaml = @"
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="IsReadOnly" Value="True"/>
-            <Style.Triggers>
-                <Trigger Property="Text" Value="">
-                    <Setter Property="Background">
-                        <Setter.Value>
-                            <VisualBrush AlignmentX="Left" AlignmentY="Center" Stretch="None">
-                                <VisualBrush.Visual>
-                                    <Label Content="{Binding Path=Tag, RelativeSource={RelativeSource AncestorType=TextBox}}" 
-                                           Foreground="#b0b0b0" FontStyle="Italic" Padding="2,0,0,0"/>
-                                </VisualBrush.Visual>
-                            </VisualBrush>
-                        </Setter.Value>
-                    </Setter>
-                </Trigger>
-            </Style.Triggers>
         </Style>
         <Style TargetType="Button">
             <Setter Property="Padding" Value="10 6"/>
@@ -185,15 +171,15 @@ $script:timerDispatcher.Add_Tick({
 })
 $script:timerDispatcher.Start()
 
-# Helper: Save current note state
+# Helper: Save current note state (skip placeholder text)
 function Save-CurrentNote {
     $script:notes[$script:currentNoteIndex].NotesText = $NotesBox.Text
-    $script:notes[$script:currentNoteIndex].AssetTag = $AssetTagBox.Text
-    $script:notes[$script:currentNoteIndex].MachineName = $MachineNameBox.Text
-    $script:notes[$script:currentNoteIndex].IpAddress = $IpAddressBox.Text
-    $script:notes[$script:currentNoteIndex].UserName = $UserNameBox.Text
-    $script:notes[$script:currentNoteIndex].Phone = $PhoneBox.Text
-    $script:notes[$script:currentNoteIndex].Ticket = $TicketBox.Text
+    $script:notes[$script:currentNoteIndex].AssetTag = if ($AssetTagBox.Tag.IsPlaceholder) { "" } else { $AssetTagBox.Text }
+    $script:notes[$script:currentNoteIndex].MachineName = if ($MachineNameBox.Tag.IsPlaceholder) { "" } else { $MachineNameBox.Text }
+    $script:notes[$script:currentNoteIndex].IpAddress = if ($IpAddressBox.Tag.IsPlaceholder) { "" } else { $IpAddressBox.Text }
+    $script:notes[$script:currentNoteIndex].UserName = if ($UserNameBox.Tag.IsPlaceholder) { "" } else { $UserNameBox.Text }
+    $script:notes[$script:currentNoteIndex].Phone = if ($PhoneBox.Tag.IsPlaceholder) { "" } else { $PhoneBox.Text }
+    $script:notes[$script:currentNoteIndex].Ticket = if ($TicketBox.Tag.IsPlaceholder) { "" } else { $TicketBox.Text }
 }
 
 # Helper: Load note into UI
@@ -208,16 +194,61 @@ function Load-Note {
     $PhoneBox.Text = $note.Phone
     $TicketBox.Text = $note.Ticket
     $NoteCountLabel.Content = "Note: $($index + 1)"
+    
+    # Update placeholders
+    Update-Placeholder $AssetTagBox "Asset Tag"
+    Update-Placeholder $MachineNameBox "Machine Name"
+    Update-Placeholder $IpAddressBox "IP Address"
+    Update-Placeholder $UserNameBox "User Name"
+    Update-Placeholder $PhoneBox "Phone"
+    Update-Placeholder $TicketBox "Ticket"
+}
+
+# Helper: Show/hide placeholder text
+function Update-Placeholder {
+    param($textBox, $placeholderText)
+    if ([string]::IsNullOrWhiteSpace($textBox.Text)) {
+        $textBox.Text = $placeholderText
+        $textBox.Foreground = "#808080"
+        $textBox.FontStyle = "Italic"
+        $textBox.Tag = @{ IsPlaceholder = $true; PlaceholderText = $placeholderText }
+    } else {
+        $textBox.Foreground = "#e0e0e0"
+        $textBox.FontStyle = "Normal"
+        $textBox.Tag = @{ IsPlaceholder = $false; PlaceholderText = $placeholderText }
+    }
+}
+
+function Setup-PlaceholderBehavior {
+    param($textBox, $placeholderText)
+    
+    Update-Placeholder $textBox $placeholderText
+    
+    $textBox.Add_GotFocus({
+        if ($this.Tag.IsPlaceholder) {
+            $this.Text = ""
+            $this.Foreground = "#e0e0e0"
+            $this.FontStyle = "Normal"
+        }
+    })
+    
+    $textBox.Add_LostFocus({
+        if ([string]::IsNullOrWhiteSpace($this.Text)) {
+            Update-Placeholder $this $this.Tag.PlaceholderText
+        } else {
+            $this.Tag.IsPlaceholder = $false
+        }
+    })
 }
 
 # Helper: Create context menu for editing field value
 function Add-FieldContextMenu {
     param($textBox, $fieldName)
     
-    # Left-click copies field to clipboard
+    # Left-click copies field to clipboard (skip if placeholder)
     $textBox.Add_PreviewMouseLeftButtonDown({
         param($sender, $e)
-        if ($this.Text -and $this.Text.Trim() -ne "") {
+        if ($this.Text -and $this.Text.Trim() -ne "" -and -not $this.Tag.IsPlaceholder) {
             [System.Windows.Clipboard]::SetText($this.Text)
             $e.Handled = $false
         }
@@ -275,6 +306,9 @@ function Add-FieldContextMenu {
         $okButton.Foreground = "White"
         $okButton.Add_Click({
             $sender.Text = $inputBox.Text
+            $sender.Foreground = "#e0e0e0"
+            $sender.FontStyle = "Normal"
+            $sender.Tag.IsPlaceholder = $false
             $inputDialog.Close()
         }.GetNewClosure())
         
@@ -298,7 +332,14 @@ function Add-FieldContextMenu {
     }.GetNewClosure())
 }
 
-# Wire up clickable fields
+# Wire up clickable fields with placeholders
+Setup-PlaceholderBehavior $AssetTagBox "Asset Tag"
+Setup-PlaceholderBehavior $MachineNameBox "Machine Name"
+Setup-PlaceholderBehavior $IpAddressBox "IP Address"
+Setup-PlaceholderBehavior $UserNameBox "User Name"
+Setup-PlaceholderBehavior $PhoneBox "Phone"
+Setup-PlaceholderBehavior $TicketBox "Ticket"
+
 Add-FieldContextMenu $AssetTagBox "Asset Tag"
 Add-FieldContextMenu $MachineNameBox "Machine Name"
 Add-FieldContextMenu $IpAddressBox "IP Address"
