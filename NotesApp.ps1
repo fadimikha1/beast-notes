@@ -35,8 +35,9 @@ $xaml = @"
             <Setter Property="IsReadOnly" Value="True"/>
         </Style>
         <Style TargetType="Button">
-            <Setter Property="Padding" Value="8 4"/>
+            <Setter Property="Padding" Value="6 3"/>
             <Setter Property="Margin" Value="4 0 0 0"/>
+            <Setter Property="Height" Value="28"/>
             <Setter Property="Background" Value="#0078d4"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderBrush" Value="#005a9e"/>
@@ -73,19 +74,19 @@ $xaml = @"
             </Grid.RowDefinitions>
 
             <!-- Notes body with spell check (primary space) -->
-            <Border Grid.Row="0" Background="{StaticResource Card}" CornerRadius="4" Padding="12" BorderBrush="#3f3f3f" BorderThickness="1">
+            <Border Grid.Row="0" Background="{StaticResource Card}" CornerRadius="4" Padding="14" BorderBrush="#3f3f3f" BorderThickness="1">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <TextBox x:Name="NotesBox" Grid.Row="0" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" SpellCheck.IsEnabled="True"
-                             TextWrapping="Wrap" Background="#2d2d2d" Foreground="#e0e0e0" BorderBrush="#3f3f3f" BorderThickness="1" FontSize="15"/>
+                             TextWrapping="Wrap" Background="#2d2d2d" Foreground="#e0e0e0" BorderBrush="#3f3f3f" BorderThickness="1" FontSize="16"/>
                 </Grid>
             </Border>
 
             <!-- Info strip: auto-filled metadata (clickable to copy, right-click to edit) -->
-            <Border Grid.Row="1" Margin="0 8 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="6" BorderBrush="#3f3f3f" BorderThickness="1" MinHeight="0">
+            <Border Grid.Row="1" Margin="0 6 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="4" BorderBrush="#3f3f3f" BorderThickness="1" MinHeight="0">
                 <UniformGrid Columns="6" Rows="1" Margin="0" HorizontalAlignment="Stretch">
                     <TextBox x:Name="AssetTagBox" Style="{StaticResource ClickableField}" Tag="Asset Tag"/>
                     <TextBox x:Name="MachineNameBox" Style="{StaticResource ClickableField}" Tag="Machine Name"/>
@@ -97,16 +98,16 @@ $xaml = @"
             </Border>
 
             <!-- Quick add buttons placeholder -->
-            <Border Grid.Row="2" Margin="0 8 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="6" BorderBrush="#3f3f3f" BorderThickness="1" MinHeight="0">
+            <Border Grid.Row="2" Margin="0 6 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="4" BorderBrush="#3f3f3f" BorderThickness="1" MinHeight="0">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button x:Name="BtnAddTemplateA" Content="Template A" Margin="0 0 0 0" Padding="8 4"/>
+                    <Button x:Name="BtnAddTemplateA" Content="Template A" Margin="0 0 0 0" Padding="6 3"/>
                     <Button x:Name="BtnAddTemplateB" Content="Template B"/>
                     <Button x:Name="BtnAddTemplateC" Content="Template C"/>
                 </StackPanel>
             </Border>
 
             <!-- Clipboard + checklists row with timer, note counter, navigation -->
-            <Border Grid.Row="3" Margin="0 8 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="6" BorderBrush="#3f3f3f" BorderThickness="1" MinHeight="0">
+            <Border Grid.Row="3" Margin="0 6 0 0" Background="{StaticResource Card}" CornerRadius="4" Padding="4" BorderBrush="#3f3f3f" BorderThickness="1" MinHeight="0">
                 <Grid>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                         <Button x:Name="BtnCopy" Content="Copy Notes"/>
@@ -114,10 +115,10 @@ $xaml = @"
                         <Button x:Name="BtnChecklist" Content="Checklist"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                        <Label x:Name="TimerLabel" Content="00:00" FontSize="16" FontWeight="Bold" Margin="0 0 15 0"/>
-                        <Label x:Name="NoteCountLabel" Content="Note: 1" FontSize="16" FontWeight="Bold" Margin="0 0 10 0"/>
-                        <Button x:Name="BtnPrevNote" Content="&lt;" Width="40" Margin="0 0 5 0" FontSize="20" FontWeight="Bold"/>
-                        <Button x:Name="BtnNextNote" Content="&gt;" Width="40" FontSize="20" FontWeight="Bold"/>
+                            <Label x:Name="TimerLabel" Content="00:00" FontSize="14" FontWeight="Bold" Margin="0 0 12 0"/>
+                            <Label x:Name="NoteCountLabel" Content="Note: 1" FontSize="14" FontWeight="Bold" Margin="0 0 8 0"/>
+                            <Button x:Name="BtnPrevNote" Content="&lt;" Width="36" Margin="0 0 4 0" FontSize="18" FontWeight="Bold"/>
+                            <Button x:Name="BtnNextNote" Content="&gt;" Width="36" FontSize="18" FontWeight="Bold"/>
                     </StackPanel>
                 </Grid>
             </Border>
