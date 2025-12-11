@@ -258,6 +258,10 @@ function Add-FieldContextMenu {
     $textBox.Add_PreviewMouseRightButtonDown({
         param($sender, $e)
         $e.Handled = $true
+        
+        # Get actual value (empty if placeholder)
+        $currentValue = if ($this.Tag.IsPlaceholder) { "" } else { $this.Text }
+        
         $inputDialog = New-Object System.Windows.Window
         $inputDialog.Title = "Edit $fieldName"
         $inputDialog.Width = 400
@@ -275,17 +279,19 @@ function Add-FieldContextMenu {
         $rowDef2.Height = "*"
         $rowDef3 = New-Object System.Windows.Controls.RowDefinition
         $rowDef3.Height = "Auto"
-        $grid.RowDefinitions.Add($rowDef1)
-        $grid.RowDefinitions.Add($rowDef2)
-        $grid.RowDefinitions.Add($rowDef3)
-        
         $label = New-Object System.Windows.Controls.Label
         $label.Content = $fieldName
         $label.Margin = "0 0 0 5"
+        $label.Foreground = "#e0e0e0"
+        [System.Windows.Controls.Grid]::SetRow($label, 0)
+        $label = New-Object System.Windows.Controls.Label
+        $label.Content = $fieldName
+        $label.Margin = "0 0 0 5"
+        $label.Foreground = "#e0e0e0"
         [System.Windows.Controls.Grid]::SetRow($label, 0)
         
         $inputBox = New-Object System.Windows.Controls.TextBox
-        $inputBox.Text = $this.Text
+        $inputBox.Text = $currentValue
         $inputBox.Padding = "6"
         $inputBox.Margin = "0 0 0 10"
         $inputBox.Background = "#2d2d2d"
