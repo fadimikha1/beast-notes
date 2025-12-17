@@ -183,6 +183,7 @@ KM000805: HOW TO: Connect to a Remote Computer or Folder Using Map Network Drive
 "@.Trim()
 }
 $script:selectedTemplateKeys = New-Object System.Collections.Generic.List[string]
+$script:selectedTemplateKeys.Add('NIPR')
 $script:templateSelectedBrush = New-Object System.Windows.Media.SolidColorBrush([System.Windows.Media.Color]::FromRgb(250, 204, 21)) # yellow
 $script:templateDefaultBrush = New-Object System.Windows.Media.SolidColorBrush([System.Windows.Media.Color]::FromRgb(0, 120, 212)) # default blue
 
@@ -661,8 +662,8 @@ $script:clipboardMonitor.Add_Tick({
                     }
                 }
                 
-                # Check for machine name pattern: WL/WD/DD/DL/NL/ND/AL/AD followed by 4 letters and 6 digits
-                if ($clipboardText -match '(?i)(WL|WD|DD|DL|NL|ND|AL|AD)([a-zA-Z]{4})(\d{6})') {
+                # Check for machine name pattern: WL/WD/DD/DL/NL/ND/AL/AD followed by 4 letters and 6 digits, optionally ending in NN
+                if ($clipboardText -match '(?i)(WL|WD|DD|DL|NL|ND|AL|AD)([a-zA-Z]{4})(\d{6})(NN)?') {
                     $machineName = $matches[0].ToUpper()
                     
                     # Update machine name field if it's currently empty or placeholder
@@ -808,6 +809,9 @@ $BtnChecklist.Add_Click({
 $BtnEscalation.Add_Click({
     Show-EscalationMenu -Button $BtnEscalation -Items $script:escalationItems
 })
+# Set NIPR button to selected state by default
+Set-TemplateButtonState -Button $BtnAddTemplateA -Selected:$true
+
 $BtnAddTemplateA.Add_Click({ Toggle-TemplateSelection -Key 'NIPR' -Button $BtnAddTemplateA })
 $BtnAddTemplateB.Add_Click({ Toggle-TemplateSelection -Key 'RA' -Button $BtnAddTemplateB })
 $BtnAddTemplateC.Add_Click({ Toggle-TemplateSelection -Key 'RDC' -Button $BtnAddTemplateC })
