@@ -163,6 +163,7 @@ $script:notes = @(@{
     Ticket = ""
     StartTime = Get-Date
     ElapsedTime = [TimeSpan]::Zero
+    SelectedTemplates = @('NIPR')
 })
 $script:currentNoteIndex = 0
 
@@ -349,6 +350,7 @@ function Save-CurrentNote {
     $script:notes[$script:currentNoteIndex].UserName = if ($UserNameBox.Tag.IsPlaceholder) { "" } else { $UserNameBox.Text }
     $script:notes[$script:currentNoteIndex].Phone = if ($PhoneBox.Tag.IsPlaceholder) { "" } else { $PhoneBox.Text }
     $script:notes[$script:currentNoteIndex].Ticket = if ($TicketBox.Tag.IsPlaceholder) { "" } else { $TicketBox.Text }
+    $script:notes[$script:currentNoteIndex].SelectedTemplates = @($script:selectedTemplateKeys)
 }
 
 # Helper: Load note into UI
@@ -380,13 +382,20 @@ function Load-Note {
     Update-Placeholder $PhoneBox "Phone"
     Update-Placeholder $TicketBox "Ticket"
     
-    # Reset template button selections to NIPR only
+    # Restore template button selections from note
     $script:selectedTemplateKeys.Clear()
-    $script:selectedTemplateKeys.Add('NIPR')
-    Set-TemplateButtonState -Button $BtnAddTemplateA -Selected:$true
-    Set-TemplateButtonState -Button $BtnAddTemplateB -Selected:$false
-    Set-TemplateButtonState -Button $BtnAddTemplateC -Selected:$false
-    Set-TemplateButtonState -Button $BtnAddTemplateD -Selected:$false
+    if ($note.SelectedTemplates) {
+        foreach ($key in $note.SelectedTemplates) {
+            $script:selectedTemplateKeys.Add($key)
+        }
+    } else {
+        # Default to NIPR if no templates saved
+        $script:selectedTemplateKeys.Add('NIPR')
+    }
+    Set-TemplateButtonState -Button $BtnAddTemplateA -Selected:($script:selectedTemplateKeys.Contains('NIPR'))
+    Set-TemplateButtonState -Button $BtnAddTemplateB -Selected:($script:selectedTemplateKeys.Contains('RA'))
+    Set-TemplateButtonState -Button $BtnAddTemplateC -Selected:($script:selectedTemplateKeys.Contains('RDC'))
+    Set-TemplateButtonState -Button $BtnAddTemplateD -Selected:($script:selectedTemplateKeys.Contains('UNC'))
     
     # Re-run ping tests if fields have values
     if ($note.MachineName -and $note.MachineName.Trim() -ne "") {
@@ -712,7 +721,7 @@ $script:clipboardMonitor.Add_Tick({
                         $UserNameBox.FontStyle = "Normal"
                         $UserNameBox.Tag.IsPlaceholder = $false
                     }
-                } elseif ($clipboardText -match '(?i)\b([a-z]{2,})\.([a-z]{2,})(?!\.(?:com|org|net|edu|gov|mil|io|co|uk|us|de|fr|jp|au|ca|in|br|ru|cn|es|it|nl|be|ch|se|no|dk|fi|pl|cz|hu|gr|pt|ie|nz|za|mx|sg|hk|tw|kr|th|my|ph|id|vn|bd|pk|ir|sa|ae|qa|il|tr|eg|ng|ke|gh|tz|ug|et|py|ar|cl|pe|co|ve|ec|bo|gy|sr|fk)\b)', 'IgnoreCase')) {
+                } elseif ($clipboardText -match '(?i)\b([a-z]{2,})\.([a-z]{2,})(?!\.(?:com|org|net|edu|gov|mil|io|co|uk|us|de|fr|jp|au|ca|in|br|ru|cn|es|it|nl|be|ch|se|no|dk|fi|pl|cz|hu|gr|pt|ie|nz|za|mx|sg|hk|tw|kr|th|my|ph|id|vn|bd|pk|ir|sa|ae|qa|il|tr|eg|ng|ke|gh|tz|ug|et|py|ar|cl|pe|co|ve|ec|bo|gy|sr|fk)\b)') {
                     # No middle initial, and doesn't match common TLDs
                     $userName = $matches[0].ToLower()
                     
@@ -771,6 +780,7 @@ $BtnNextNote.Add_Click({
             Ticket = ""
             StartTime = Get-Date
             ElapsedTime = [TimeSpan]::Zero
+            SelectedTemplates = @('NIPR')
         }
     }
     Load-Note $script:currentNoteIndex
