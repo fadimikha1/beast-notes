@@ -380,6 +380,14 @@ function Load-Note {
     Update-Placeholder $PhoneBox "Phone"
     Update-Placeholder $TicketBox "Ticket"
     
+    # Reset template button selections to NIPR only
+    $script:selectedTemplateKeys.Clear()
+    $script:selectedTemplateKeys.Add('NIPR')
+    Set-TemplateButtonState -Button $BtnAddTemplateA -Selected:$true
+    Set-TemplateButtonState -Button $BtnAddTemplateB -Selected:$false
+    Set-TemplateButtonState -Button $BtnAddTemplateC -Selected:$false
+    Set-TemplateButtonState -Button $BtnAddTemplateD -Selected:$false
+    
     # Re-run ping tests if fields have values
     if ($note.MachineName -and $note.MachineName.Trim() -ne "") {
         Test-HostReachability $note.MachineName $MachineNameBox $window
