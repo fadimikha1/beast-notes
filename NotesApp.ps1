@@ -692,7 +692,8 @@ $script:clipboardMonitor.Add_Tick({
                 }
                 
                 # Check for username pattern: first.last or first.m.last (where m is single letter middle initial)
-                if ($clipboardText -match '(?i)\b([a-z]{2,})\.([a-z])\.([a-z]{2,})\b') {
+                # Exclude common TLDs to avoid matching domains like "google.com" or "navy.mil"
+                if ($clipboardText -match '(?i)\b([a-z]{2,})\.([a-z])\.([a-z]{2,})(?!\.)\b') {
                     # Has middle initial
                     $userName = $matches[0].ToLower()
                     
@@ -703,8 +704,8 @@ $script:clipboardMonitor.Add_Tick({
                         $UserNameBox.FontStyle = "Normal"
                         $UserNameBox.Tag.IsPlaceholder = $false
                     }
-                } elseif ($clipboardText -match '(?i)\b([a-z]{2,})\.([a-z]{2,})\b') {
-                    # No middle initial
+                } elseif ($clipboardText -match '(?i)\b([a-z]{2,})\.([a-z]{2,})(?!\.(?:com|org|net|edu|gov|mil|io|co|uk|us|de|fr|jp|au|ca|in|br|ru|cn|es|it|nl|be|ch|se|no|dk|fi|pl|cz|hu|gr|pt|ie|nz|za|mx|sg|hk|tw|kr|th|my|ph|id|vn|bd|pk|ir|sa|ae|qa|il|tr|eg|ng|ke|gh|tz|ug|et|py|ar|cl|pe|co|ve|ec|bo|gy|sr|fk)\b)', 'IgnoreCase')) {
+                    # No middle initial, and doesn't match common TLDs
                     $userName = $matches[0].ToLower()
                     
                     # Update username field if it's currently empty or placeholder
